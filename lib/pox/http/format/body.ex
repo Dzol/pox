@@ -1,4 +1,4 @@
-defmodule Pox.Format.Body do
+defmodule Pox.HTTP.Format.Body do
 
   def write(_) do
     <<>>

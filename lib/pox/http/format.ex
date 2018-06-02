@@ -1,7 +1,7 @@
-defmodule Pox.Format do
-  alias Pox.Format.Line
-  alias Pox.Format.Header
-  alias Pox.Format.Body
+defmodule Pox.HTTP.Format do
+  alias Pox.HTTP.Format.Line
+  alias Pox.HTTP.Format.Header
+  alias Pox.HTTP.Format.Body
 
   def write(x) do
     x |> data() |> IO.iodata_to_binary()
@@ -11,6 +11,7 @@ defmodule Pox.Format do
     def line(x) do
       x
       |> String.split("\r\n\r\n", parts: 2)
+      |> parts(2)
       |> hd()
       |> String.split("\r\n")
       |> hd()
@@ -19,6 +20,7 @@ defmodule Pox.Format do
     def header(x) do
       x
       |> String.split("\r\n\r\n", parts: 2)
+      |> parts(2)
       |> hd()
       |> String.split("\r\n")
       |> tl()
@@ -27,7 +29,12 @@ defmodule Pox.Format do
     def body(x) do
       x
       |> String.split("\r\n\r\n", parts: 2)
+      |> parts(2)
       |> List.last()
+    end
+
+    defp parts(x, n) when length(x) === n do
+      x
     end
   end
 
@@ -40,7 +47,7 @@ defmodule Pox.Format do
     b = Header.read(j)
     c = Body.read(k)
 
-    %Pox.Response{
+    %Pox.HTTP.Response{
       status: a,
       header: b, 
       body:   c

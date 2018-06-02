@@ -1,15 +1,15 @@
-defmodule PoxTest do
+defmodule Pox.HTTPTest do
   use ExUnit.Case
 
   test "write/1 + read/1" do
     alias :gen_tcp, as: TCP
 
     for host <- table() do
-      q = %Pox.Request{
+      q = %Pox.HTTP.Request{
         method: "HEAD",
         header: [{"User-Agent", "Pox"}, {"Host", host}]
       }
-      |> Pox.Format.write()
+      |> Pox.HTTP.Format.write()
 #      |> IO.inspect()
 
       {:ok, s} = TCP.connect(host, 80, [:binary, packet: 0] ++ passive())
@@ -17,11 +17,26 @@ defmodule PoxTest do
       TCP.close(s)
 
       t = r
-      |> Pox.Format.read()
+      |> Pox.HTTP.Format.read()
 #      |> IO.inspect()
 
-      {i, _} = t.status; assert (i in 200..210) or (i in 300..310)
+      i = t.status; assert (i in 200..210) or (i in 300..310)
     end
+  end
+
+  test "status line read" do
+    assert_raise FunctionClauseError, fn ->
+      Pox.HTTP.Format.read("HTTP/1.1 200 OK")
+    end
+    assert_raise FunctionClauseError, fn ->
+      Pox.HTTP.Format.read("HTTP/1.1 200 OK\r\n")
+    end
+    assert Pox.HTTP.Format.read("HTTP/1.1 200 OK\r\n\r\n") ===
+      %Pox.HTTP.Response{
+        body: "",
+        header: [],
+        status: 200
+      }
   end
 
   defp table do

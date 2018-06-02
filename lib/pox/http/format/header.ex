@@ -1,4 +1,4 @@
-defmodule Pox.Format.Header do
+defmodule Pox.HTTP.Format.Header do
   defmodule Element do
     @type t :: {String.t, String.t}
 
