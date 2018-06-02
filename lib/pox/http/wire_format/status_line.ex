@@ -1,4 +1,4 @@
-defmodule Pox.HTTP.Format.Line do
+defmodule Pox.HTTP.WireFormat.StatusLine do
   def write(x) do
     [x.method, " ", x.path, " ", "HTTP/1.1"]
   end

@@ -1,7 +1,7 @@
-defmodule Pox.HTTP.Format do
-  alias Pox.HTTP.Format.Line
-  alias Pox.HTTP.Format.Header
-  alias Pox.HTTP.Format.Body
+defmodule Pox.HTTP.WireFormat do
+  alias Pox.HTTP.WireFormat.StatusLine
+  alias Pox.HTTP.WireFormat.Header
+  alias Pox.HTTP.WireFormat.Body
 
   def write(x) do
     x |> data() |> IO.iodata_to_binary()
@@ -43,7 +43,7 @@ defmodule Pox.HTTP.Format do
     j = Fragment.header(x)
     k = Fragment.body(x)
 
-    a = Line.read(i)
+    a = StatusLine.read(i)
     b = Header.read(j)
     c = Body.read(k)
 
@@ -55,7 +55,7 @@ defmodule Pox.HTTP.Format do
   end
 
   defp data(x) do
-    [Line.write(x),   "\r\n",
+    [StatusLine.write(x),   "\r\n",
      Header.write(x), "\r\n", "\r\n",
      Body.write(x),   "\r\n"
     ]

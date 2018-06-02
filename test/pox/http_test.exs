@@ -9,7 +9,7 @@ defmodule Pox.HTTPTest do
         method: "HEAD",
         header: [{"User-Agent", "Pox"}, {"Host", host}]
       }
-      |> Pox.HTTP.Format.write()
+      |> Pox.HTTP.WireFormat.write()
 #      |> IO.inspect()
 
       {:ok, s} = TCP.connect(host, 80, [:binary, packet: 0] ++ passive())
@@ -17,7 +17,7 @@ defmodule Pox.HTTPTest do
       TCP.close(s)
 
       t = r
-      |> Pox.HTTP.Format.read()
+      |> Pox.HTTP.WireFormat.read()
 #      |> IO.inspect()
 
       i = t.status; assert (i in 200..210) or (i in 300..310)
@@ -26,12 +26,12 @@ defmodule Pox.HTTPTest do
 
   test "status line read" do
     assert_raise FunctionClauseError, fn ->
-      Pox.HTTP.Format.read("HTTP/1.1 200 OK")
+      Pox.HTTP.WireFormat.read("HTTP/1.1 200 OK")
     end
     assert_raise FunctionClauseError, fn ->
-      Pox.HTTP.Format.read("HTTP/1.1 200 OK\r\n")
+      Pox.HTTP.WireFormat.read("HTTP/1.1 200 OK\r\n")
     end
-    assert Pox.HTTP.Format.read("HTTP/1.1 200 OK\r\n\r\n") ===
+    assert Pox.HTTP.WireFormat.read("HTTP/1.1 200 OK\r\n\r\n") ===
       %Pox.HTTP.Response{
         body: "",
         header: [],
