@@ -1,6 +1,7 @@
 defmodule Pox.HTTPTest do
   use ExUnit.Case
 
+  @tag :system
   test "write/1 + read/1" do
     alias :gen_tcp, as: TCP
 
