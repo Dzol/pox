@@ -12,18 +12,18 @@ defmodule Pox.HTTP.WireFormat do
       x
       |> String.split("\r\n\r\n", parts: 2)
       |> parts(2)
-      |> hd()
+      |> Kernel.hd()
       |> String.split("\r\n")
-      |> hd()
+      |> Kernel.hd()
     end
 
     def header(x) do
       x
       |> String.split("\r\n\r\n", parts: 2)
       |> parts(2)
-      |> hd()
+      |> Kernel.hd()
       |> String.split("\r\n")
-      |> tl()
+      |> Kernel.tl()
     end
 
     def body(x) do

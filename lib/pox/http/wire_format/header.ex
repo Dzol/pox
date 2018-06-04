@@ -1,9 +1,23 @@
 defmodule Pox.HTTP.WireFormat.Header do
   defmodule Element do
-    @type t :: {String.t, String.t}
+    defmodule Name do
+      @type t :: String.t
+    end
+
+    defmodule Value do
+      @type t :: String.t
+    end
+
+    @type t :: {Name.t, Value.t}
 
     def read(x) do
       String.split(x, ": ", parts: 2)
+    end
+
+    def write(x) do
+      x
+      |> Tuple.to_list()
+      |> List.insert_at(_position = 1, _delimiter = [":", " "])
     end
   end
 
@@ -12,8 +26,7 @@ defmodule Pox.HTTP.WireFormat.Header do
   def write(x) do
     x
     |> Map.get(:header)
-    |> Enum.map(&Tuple.to_list/1)
-    |> Enum.map(&List.insert_at(&1, 1, [":", " "]))
+    |> Enum.map(&Element.write/1)
     |> Enum.intersperse("\r\n")
   end
 
