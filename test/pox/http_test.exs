@@ -40,6 +40,49 @@ defmodule Pox.HTTPTest do
       }
   end
 
+  test "write/1 [Wikipedia]" do
+    x = ["GET /index.html HTTP/1.1",
+         "\r\n",
+         "Host: www.example.com"
+        ]
+    x = Enum.join(x)
+    q = %Pox.HTTP.Request{
+      method: "GET",
+      path: "/index.html",
+      header: [{"Host", "www.example.com"}]
+    }
+    assert Pox.HTTP.WireFormat.write(q) =~ x
+  end
+
+  test "read/1 [Wikipedia]" do
+    x = ["HTTP/1.1 200 OK",
+         "Date: Mon, 23 May 2005 22:38:34 GMT",
+         "Content-Type: text/plain; charset=UTF-8",
+         "Content-Length: 8",
+         "Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT",
+         "Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)",
+         "ETag: \"3f80f-1b6-3e1cb03b\"",
+         "Accept-Ranges: bytes",
+         "Connection: close"
+        ]
+    x = Enum.join(x, "\r\n") <> "\r\n" <> "\r\n" <> "Hello Elixir!"
+    h = [
+      {"Date", "Mon, 23 May 2005 22:38:34 GMT"},
+      {"Content-Type", "text/plain; charset=UTF-8"},
+      {"Content-Length", "8"},
+      {"Last-Modified", "Wed, 08 Jan 2003 23:11:55 GMT"},
+      {"Server", "Apache/1.3.3.7 (Unix) (Red-Hat/Linux)"},
+      {"ETag", "\"3f80f-1b6-3e1cb03b\""},
+      {"Accept-Ranges", "bytes"},
+      {"Connection", "close"}
+    ]
+    assert Pox.HTTP.WireFormat.read(x) === %Pox.HTTP.Response{
+      body: "Hello Elixir!",
+      header: h,
+      status: 200
+    }
+  end
+
   defp table do
     ['www.google.com',
      'www.erlang-solutions.com',
