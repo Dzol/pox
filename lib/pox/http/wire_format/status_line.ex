@@ -4,9 +4,9 @@ defmodule Pox.HTTP.WireFormat.StatusLine do
   end
 
   def read(x) do
-    [protocol, number, text] = String.split(x, " ", parts: 3) ## RFC 2616
+    [protocol, number, _text] = String.split(x, " ", parts: 3)
     "HTTP/1.1" = protocol
-    Pox.HTTP.Response.Status.known!(String.to_integer(number), text)
+    Pox.HTTP.Response.Status.known!(String.to_integer(number))
     String.to_integer(number)
   end
 end

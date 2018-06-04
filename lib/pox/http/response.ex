@@ -2,13 +2,13 @@ defmodule Pox.HTTP.Response do
   defmodule Status do
     @type t :: integer ## 100s, 200s, ...
 
-    def known!(200, "OK") do
+    def known!(200) do
     end
-    def known!(301, text) when text in ["Moved Permanently", "TLS Redirect"] do
+    def known!(301) do
     end
-    def known!(400, "Bad Request") do
+    def known!(400) do
     end
-    def known!(500, "Internal Server Error") do
+    def known!(500) do
     end
   end
 
