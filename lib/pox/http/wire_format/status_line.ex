@@ -6,7 +6,8 @@ defmodule Pox.HTTP.WireFormat.StatusLine do
   def read(x) do
     [protocol, number, _text] = String.split(x, " ", parts: 3)
     "HTTP/1.1" = protocol
-    Pox.HTTP.Response.Status.known!(String.to_integer(number))
-    String.to_integer(number)
+    number = String.to_integer(number)
+    Pox.HTTP.Response.Status.known!(number)
+    number
   end
 end
