@@ -69,7 +69,7 @@ defmodule Pox.HTTP.V1Test do
     h = [
       {"Date", "Mon, 23 May 2005 22:38:34 GMT"},
       {"Content-Type", "text/plain; charset=UTF-8"},
-      {"Content-Length", "8"},
+      {"Content-Length", 8},
       {"Last-Modified", "Wed, 08 Jan 2003 23:11:55 GMT"},
       {"Server", "Apache/1.3.3.7 (Unix) (Red-Hat/Linux)"},
       {"ETag", "\"3f80f-1b6-3e1cb03b\""},
