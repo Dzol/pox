@@ -11,7 +11,9 @@ defmodule Pox.HTTP.V1.WireFormat.Header do
     @type t :: {Name.t, Value.t}
 
     def read(x) do
-      String.split(x, ": ", parts: 2)
+      x
+      |> String.split(": ", parts: 2)
+      |> List.to_tuple()
     end
 
     def write(x) do
@@ -31,6 +33,6 @@ defmodule Pox.HTTP.V1.WireFormat.Header do
   end
 
   def read(x) do
-    Enum.map(x, &List.to_tuple(Element.read(&1)))
+    Enum.map(x, &Element.read(&1))
   end
 end
