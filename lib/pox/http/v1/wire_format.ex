@@ -1,7 +1,7 @@
-defmodule Pox.HTTP.WireFormat do
-  alias Pox.HTTP.WireFormat.StatusLine
-  alias Pox.HTTP.WireFormat.Header
-  alias Pox.HTTP.WireFormat.Body
+defmodule Pox.HTTP.V1.WireFormat do
+  alias Pox.HTTP.V1.WireFormat.StatusLine
+  alias Pox.HTTP.V1.WireFormat.Header
+  alias Pox.HTTP.V1.WireFormat.Body
 
   def write(x) do
     x |> data() |> IO.iodata_to_binary()
@@ -47,7 +47,7 @@ defmodule Pox.HTTP.WireFormat do
     b = Header.read(j)
     c = Body.read(k)
 
-    %Pox.HTTP.Response{
+    %Pox.HTTP.V1.Response{
       status: a,
       header: b, 
       body:   c

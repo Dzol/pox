@@ -1,4 +1,4 @@
-defmodule Pox.HTTP.Response do
+defmodule Pox.HTTP.V1.Response do
   defmodule Status do
     @type t :: integer ## 100s, 200s, ...
 
@@ -13,8 +13,8 @@ defmodule Pox.HTTP.Response do
   end
 
   @type t :: %__MODULE__{
-    status: Pox.HTTP.Response.StatusLine.t,
-    header: Pox.HTTP.WireFormat.Header.t,
+    status: Pox.HTTP.V1.Response.StatusLine.t,
+    header: Pox.HTTP.V1.WireFormat.Header.t,
     body:   <<>>
   }
   defstruct [

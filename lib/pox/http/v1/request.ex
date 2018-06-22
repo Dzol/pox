@@ -1,8 +1,8 @@
-defmodule Pox.HTTP.Request do
+defmodule Pox.HTTP.V1.Request do
   @type t :: %__MODULE__{
     method: String.t,
     path:   String.t,
-    header: Pox.HTTP.WireFormat.Header.t,
+    header: Pox.HTTP.V1.WireFormat.Header.t,
     body:   String.t
   }
   defstruct [

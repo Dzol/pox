@@ -1,4 +1,4 @@
-defmodule Pox.HTTP.WireFormat.Header do
+defmodule Pox.HTTP.V1.WireFormat.Header do
   defmodule Element do
     defmodule Name do
       @type t :: String.t
