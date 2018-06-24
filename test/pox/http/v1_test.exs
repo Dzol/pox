@@ -1,4 +1,4 @@
-defmodule Pox.HTTP.V1Test do
+defmodule Pox.HTTP.V1OneTest do
   use ExUnit.Case
 
   @tag :system
@@ -6,11 +6,11 @@ defmodule Pox.HTTP.V1Test do
     alias :gen_tcp, as: TCP
 
     for host <- table() do
-      q = %Pox.HTTP.V1.Request{
+      q = %Pox.HTTP.V1One.Request{
         method: "HEAD",
         header: [{"User-Agent", "Pox"}, {"Host", host}]
       }
-      |> Pox.HTTP.V1.WireFormat.write()
+      |> Pox.HTTP.V1One.WireFormat.write()
 #      |> IO.inspect()
 
       {:ok, s} = TCP.connect(host, 80, [:binary, packet: 0] ++ passive())
@@ -18,7 +18,7 @@ defmodule Pox.HTTP.V1Test do
       TCP.close(s)
 
       t = r
-      |> Pox.HTTP.V1.WireFormat.read()
+      |> Pox.HTTP.V1One.WireFormat.read()
 #      |> IO.inspect()
 
       i = t.status; assert (i in 200..210) or (i in 300..310)
@@ -27,13 +27,13 @@ defmodule Pox.HTTP.V1Test do
 
   test "status line read" do
     assert_raise FunctionClauseError, fn ->
-      Pox.HTTP.V1.WireFormat.read("HTTP/1.1 200 OK")
+      Pox.HTTP.V1One.WireFormat.read("HTTP/1.1 200 OK")
     end
     assert_raise FunctionClauseError, fn ->
-      Pox.HTTP.V1.WireFormat.read("HTTP/1.1 200 OK\r\n")
+      Pox.HTTP.V1One.WireFormat.read("HTTP/1.1 200 OK\r\n")
     end
-    assert Pox.HTTP.V1.WireFormat.read("HTTP/1.1 200 OK\r\n\r\n") ===
-      %Pox.HTTP.V1.Response{
+    assert Pox.HTTP.V1One.WireFormat.read("HTTP/1.1 200 OK\r\n\r\n") ===
+      %Pox.HTTP.V1One.Response{
         body: "",
         header: [],
         status: 200
@@ -46,12 +46,12 @@ defmodule Pox.HTTP.V1Test do
          "Host: www.example.com"
         ]
     x = Enum.join(x)
-    q = %Pox.HTTP.V1.Request{
+    q = %Pox.HTTP.V1One.Request{
       method: "GET",
       path: "/index.html",
       header: [{"Host", "www.example.com"}]
     }
-    assert Pox.HTTP.V1.WireFormat.write(q) =~ x
+    assert Pox.HTTP.V1One.WireFormat.write(q) =~ x
   end
 
   test "read/1 [Wikipedia]" do
@@ -76,7 +76,7 @@ defmodule Pox.HTTP.V1Test do
       {"Accept-Ranges", "bytes"},
       {"Connection", "close"}
     ]
-    assert Pox.HTTP.V1.WireFormat.read(x) === %Pox.HTTP.V1.Response{
+    assert Pox.HTTP.V1One.WireFormat.read(x) === %Pox.HTTP.V1One.Response{
       body: "Hello Elixir!",
       header: h,
       status: 200
